@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Details - ShopEase</title>
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7fb;
+
+            color: #222;
+        }
+
+
+        header {
+            background: #111827;
+
+            color: white;
+
+            padding: 20px 60px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        header h2 {
+            margin: 0;
+        }
+
+
+        header a {
+            color: white;
+
+            text-decoration: none;
+
+            margin-left: 25px;
+        }
+
+
+        .container {
+            max-width: 900px;
+
+            margin: 50px auto;
+
+            padding: 0 20px;
+        }
+
+
+        .title {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .box {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .order-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .order-number {
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+
+        .status {
+            background: #fff3cd;
+
+            color: #856404;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        .item {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 18px 0;
+
+            border-bottom: 1px solid #ddd;
+        }
+
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+
+        .item-name {
+            font-weight: bold;
+        }
+
+
+        .item-info {
+            color: #666;
+
+            margin-top: 5px;
+
+            font-size: 14px;
+        }
+
+
+        .total {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding-top: 20px;
+
+            margin-top: 10px;
+
+            border-top: 2px solid #222;
+
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+
+        .customer-info p {
+            margin: 10px 0;
+
+            line-height: 1.6;
+        }
+
+
+        .back-btn {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+        }
+
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+
+            .order-top {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .item {
+                flex-direction: column;
+
+                gap: 8px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header>
+
+        <h2>ShopEase</h2>
+
+
+        <nav>
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'cart' %}">
+                Cart
+            </a>
+
+            <a href="{% url 'my_orders' %}">
+                My Orders
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <div class="container">
+
+
+        <div class="title">
+
+            <h1>
+                Order Details
+            </h1>
+
+        </div>
+
+
+
+        <div class="box">
+
+            <div class="order-top">
+
+                <div class="order-number">
+
+                    Order #{{ order.id }}
+
+                </div>
+
+
+                <div class="status">
+
+                    {{ order.status }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="box">
+
+            <h2>
+                Products
+            </h2>
+
+
+            {% for item in order.items.all %}
+
+            <div class="item">
+
+                <div>
+
+                    <div class="item-name">
+
+                        {{ item.product.name }}
+
+                    </div>
+
+
+                    <div class="item-info">
+
+                        Quantity:
+                        {{ item.quantity }}
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    Rs.
+                    {{ item.price }}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+
+            <div class="total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    Rs. {{ order.total_amount }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="box customer-info">
+
+            <h2>
+                Delivery Information
+            </h2>
+
+
+            <p>
+                <strong>Name:</strong>
+                {{ order.full_name }}
+            </p>
+
+
+            <p>
+                <strong>Phone:</strong>
+                {{ order.phone }}
+            </p>
+
+
+            <p>
+                <strong>Address:</strong>
+                {{ order.address }}
+            </p>
+
+
+            <p>
+                <strong>Order Date:</strong>
+                {{ order.created_at|date:"d M Y, h:i A" }}
+            </p>
+
+        </div>
+
+
+
+        <a href="{% url 'my_orders' %}" class="back-btn">
+            ← Back to My Orders
+        </a>
+
+
+    </div>
+
+
+</body>
+
+</html>

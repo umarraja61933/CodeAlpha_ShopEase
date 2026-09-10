@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - ShopEase</title>
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7fb;
+
+            color: #222;
+        }
+
+
+        header {
+            background: #111827;
+
+            color: white;
+
+            padding: 20px 60px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        header h2 {
+            margin: 0;
+        }
+
+
+        header nav a {
+            color: white;
+
+            text-decoration: none;
+
+            margin-left: 25px;
+        }
+
+
+        .container {
+            max-width: 1000px;
+
+            margin: 50px auto;
+
+            padding: 0 20px;
+        }
+
+
+        h1 {
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .orders-box {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .order-card {
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .order-card:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .order-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .order-number {
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            background: #fff3cd;
+
+            color: #856404;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .order-info {
+            color: #666;
+
+            line-height: 1.8;
+        }
+
+
+        .order-total {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-top: 10px;
+        }
+
+
+        .view-btn {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 10px 18px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 6px;
+        }
+
+
+        .view-btn:hover {
+            background: #374151;
+        }
+
+
+        .empty-orders {
+            text-align: center;
+
+            padding: 50px 20px;
+        }
+
+
+        .empty-orders p {
+            color: #666;
+        }
+
+
+        .shop-btn {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 12px 22px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+        }
+
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+
+            .order-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header>
+
+        <h2>ShopEase</h2>
+
+
+        <nav>
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'cart' %}">
+                Cart
+            </a>
+
+            <a href="{% url 'my_orders' %}">
+                My Orders
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <div class="container">
+
+        <h1>
+            My Orders
+        </h1>
+
+
+        {% if orders %}
+
+        <div class="orders-box">
+
+
+            {% for order in orders %}
+
+            <div class="order-card">
+
+
+                <div class="order-header">
+
+                    <div class="order-number">
+
+                        Order #{{ order.id }}
+
+                    </div>
+
+
+                    <div class="status">
+
+                        {{ order.status }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="order-info">
+
+                    <div>
+                        Date:
+                        {{ order.created_at|date:"d M Y, h:i A" }}
+                    </div>
+
+                    <div>
+                        Customer:
+                        {{ order.full_name }}
+                    </div>
+
+                    <div class="order-total">
+
+                        Total:
+                        Rs. {{ order.total_amount }}
+
+                    </div>
+
+                </div>
+
+
+                <a href="{% url 'order_detail' order.id %}" class="view-btn">
+                    View Details
+                </a>
+
+
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="orders-box empty-orders">
+
+            <h2>
+                No Orders Yet
+            </h2>
+
+            <p>
+                You haven't placed any orders yet.
+            </p>
+
+            <a href="{% url 'home' %}" class="shop-btn">
+                Start Shopping
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</body>
+
+</html>
