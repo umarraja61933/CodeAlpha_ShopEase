@@ -1,0 +1,200 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<style>
+    .password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-wrapper input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-right: 50px !important;
+    }
+
+    .password-toggle {
+        position: absolute !important;
+        right: 8px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+
+        width: 32px !important;
+        height: 32px !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        border: none !important;
+        background: transparent !important;
+
+        cursor: pointer !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        color: #666 !important;
+        z-index: 20 !important;
+    }
+
+    .password-toggle:hover {
+        background: transparent !important;
+        color: #000 !important;
+    }
+
+    .password-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .eye-slash {
+        display: none;
+    }
+</style>
+
+
+<div id="content-main">
+
+    <form action="{{ app_path }}" method="post" id="login-form">
+
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <p class="errornote">
+            Please enter a correct username and password.
+        </p>
+        {% endif %}
+
+
+        <div class="form-row">
+
+            {{ form.username.errors }}
+
+            <label for="id_username">
+                Username:
+            </label>
+
+            {{ form.username }}
+
+        </div>
+
+
+        <div class="form-row">
+
+            {{ form.password.errors }}
+
+            <label for="id_password">
+                Password:
+            </label>
+
+            <div class="password-wrapper">
+
+                {{ form.password }}
+
+                <button type="button" id="togglePassword" class="password-toggle" aria-label="Show password">
+
+                    <!-- Eye -->
+                    <svg class="eye-normal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z">
+                        </path>
+
+                        <circle cx="12" cy="12" r="3">
+                        </circle>
+
+                    </svg>
+
+
+                    <!-- Eye with slash -->
+                    <svg class="eye-slash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                        <path d="M3 3l18 18">
+                        </path>
+
+                        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8">
+                        </path>
+
+                        <path d="M9.9 4.2A10.9 10.9 0 0 1 12 4c6.5 0 10 8 10 8a17.5 17.5 0 0 1-3.1 4.2">
+                        </path>
+
+                        <path d="M6.1 6.1C3.5 8.1 2 12 2 12s3.5 8 10 8c1.4 0 2.7-.3 3.8-.8">
+                        </path>
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="submit-row">
+
+            <input type="submit" value="Log in">
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const passwordInput =
+            document.getElementById("id_password");
+
+        const toggleButton =
+            document.getElementById("togglePassword");
+
+        const normalEye =
+            toggleButton.querySelector(".eye-normal");
+
+        const slashEye =
+            toggleButton.querySelector(".eye-slash");
+
+
+        toggleButton.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                normalEye.style.display = "none";
+
+                slashEye.style.display = "block";
+
+                toggleButton.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                passwordInput.type = "password";
+
+                normalEye.style.display = "block";
+
+                slashEye.style.display = "none";
+
+                toggleButton.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+
+            }
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}
